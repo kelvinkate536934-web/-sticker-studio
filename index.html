@@ -1,0 +1,180 @@
+```html
+<!DOCTYPE html>
+<html lang="my" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ကိုယ်ပိုင် စတစ်ကာ ဖန်တီးရန် - Sticker Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Pyidaungsu', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header Section -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">🎨</span>
+                <h1 class="text-lg font-bold bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">Sticker Studio Pro</h1>
+            </div>
+            <div>
+                <span class="bg-indigo-900/60 text-indigo-300 text-xs px-3 py-1.5 rounded-full border border-indigo-700/50 font-medium">✨ Free & Pro Pack</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        
+        <!-- Left Column: Controls / Inputs -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+            <h2 class="text-base font-semibold text-slate-200 border-b border-slate-800 pb-2">၁။ အချက်အလက်များ ထည့်သွင်းပါ</h2>
+            
+            <!-- Image Upload -->
+            <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">ပုံတင်ရန် (Upload Image)</label>
+                <input type="file" id="imageUpload" accept="image/*" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer bg-slate-950/50 rounded-xl border border-slate-800 p-2">
+            </div>
+
+            <!-- Sticker Name -->
+            <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">စတစ်ကာအမည် (Name)</label>
+                <input type="text" id="stickerName" placeholder="ဥပမာ - ချစ်စရာ ကြောင်ပေါက်" value="ကြောင်ပေါက်လေး" class="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            </div>
+
+            <!-- Representative Emoji -->
+            <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">ကိုယ်စားပြု အီမိုဂျီ (Emoji)</label>
+                <input type="text" id="stickerEmoji" placeholder="🐱" value="🐱" class="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            </div>
+
+            <!-- Frame Styles -->
+            <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">ပုံစံဘောင် (Frame Style)</label>
+                <select id="frameStyle" class="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    <option value="rounded">အဝိုင်းပုံစံ (Rounded)</option>
+                    <option value="circle">စက်ဝိုင်းစစ်စစ် (Circle)</option>
+                    <option value="polaroid">ပိုလာရွိုက် ပုံစံ (Polaroid)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Right Column: Live Preview & Download -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col items-center justify-center space-y-4">
+            <h2 class="text-base font-semibold text-slate-200 w-full border-b border-slate-800 pb-2 text-left">၂။ အသင့်ဖြစ်မှု (Live Preview)</h2>
+            
+            <!-- Canvas Preview Container -->
+            <div id="previewContainer" class="relative w-64 h-64 bg-slate-950/80 border border-dashed border-slate-700 rounded-2xl flex flex-col items-center justify-center p-4 shadow-inner overflow-hidden">
+                <div id="polaroidCard" class="bg-white text-slate-900 p-3 rounded-xl shadow-lg flex flex-col items-center transition-all duration-300 w-48 h-52">
+                    <div class="w-36 h-36 bg-slate-200 rounded-lg overflow-hidden flex items-center justify-center relative">
+                        <img id="displayImg" src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300" class="w-full h-full object-cover" alt="Sticker Image" crossorigin="anonymous">
+                        <div id="emojiBadge" class="absolute bottom-1 right-1 bg-white/90 backdrop-blur text-base px-1.5 py-0.5 rounded-full shadow">🐱</div>
+                    </div>
+                    <div id="displayName" class="mt-2 text-xs font-bold truncate max-w-[140px] text-center">ကြောင်ပေါက်လေး</div>
+                </div>
+            </div>
+
+            <!-- Download Button (Monetization Mockup Trigger) -->
+            <button onclick="downloadSticker()" class="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white text-sm font-semibold rounded-xl shadow-lg transition-all transform active:scale-95 flex items-center justify-center space-x-2">
+                <span>⬇️ ပုံကို သိမ်းဆည်းရန် (Download)</span>
+            </button>
+            <p class="text-[10px] text-slate-500 text-center">Free version တွင် ရိုးရိုး Download ရယူနိုင်ပြီး၊ HD Pack များအတွက် Premium လိုအပ်ပါသည်။</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/60 py-3 text-center text-xs text-slate-500">
+        <p>Sticker Studio SaaS Simulation — Powered by Web Technologies</p>
+    </footer>
+
+    <!-- Message Modal Simulation -->
+    <div id="msgModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-sm w-full text-center space-y-3">
+            <div id="modalIcon" class="text-3xl">✨</div>
+            <h3 id="modalTitle" class="text-base font-bold text-slate-100">အောင်မြင်ပါသည်</h3>
+            <p id="modalDesc" class="text-xs text-slate-400">သင်၏ စတစ်ကာကို အောင်မြင်စွာ ထုတ်ယူပြီးပါပြီ။</p>
+            <button onclick="closeModal()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl">ပိတ်မည်</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const imageUpload = document.getElementById('imageUpload');
+        const displayImg = document.getElementById('displayImg');
+        const stickerName = document.getElementById('stickerName');
+        const displayName = document.getElementById('displayName');
+        const stickerEmoji = document.getElementById('stickerEmoji');
+        const emojiBadge = document.getElementById('emojiBadge');
+        const frameStyle = document.getElementById('frameStyle');
+        const polaroidCard = document.getElementById('polaroidCard');
+        
+        const msgModal = document.getElementById('msgModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+
+        // Handle Image Upload
+        imageUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    displayImg.src = event.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle Text Inputs Live Update
+        stickerName.addEventListener('input', (e) => {
+            displayName.textContent = e.target.value || 'အမည်မရှိ';
+        });
+
+        stickerEmoji.addEventListener('input', (e) => {
+            emojiBadge.textContent = e.target.value || '✨';
+        });
+
+        // Handle Frame Style Change
+        frameStyle.addEventListener('change', (e) => {
+            const style = e.target.value;
+            const imgWrapper = displayImg.parentElement;
+            
+            if (style === 'circle') {
+                polaroidCard.className = "bg-transparent flex flex-col items-center transition-all duration-300";
+                imgWrapper.className = "w-40 h-40 bg-slate-200 rounded-full overflow-hidden flex items-center justify-center relative shadow-xl border-4 border-indigo-500";
+                displayName.style.display = 'none';
+            } else if (style === 'rounded') {
+                polaroidCard.className = "bg-slate-900/90 border border-slate-700 text-white p-3 rounded-2xl shadow-lg flex flex-col items-center transition-all duration-300 w-48 h-52";
+                imgWrapper.className = "w-36 h-36 bg-slate-800 rounded-xl overflow-hidden flex items-center justify-center relative";
+                displayName.style.display = 'block';
+            } else {
+                // polaroid
+                polaroidCard.className = "bg-white text-slate-900 p-3 rounded-xl shadow-lg flex flex-col items-center transition-all duration-300 w-48 h-52";
+                imgWrapper.className = "w-36 h-36 bg-slate-200 rounded-lg overflow-hidden flex items-center justify-center relative";
+                displayName.style.display = 'block';
+            }
+        });
+
+        // Download Simulation Function
+        function downloadStracker() {} // placeholder
+        function downloadSticker() {
+            modalTitle.textContent = "စတစ်ကာ ထုတ်ယူပြီးပါပြီ!";
+            modalDesc.textContent = "သင့်ဖုန်း သို့မဟုတ် ကွန်ပျူတာထဲသို့ ပုံကို အောင်မြင်စွာ ဒေါင်းလုဒ်လုပ်ပြီးပါပြီ။ (Freemium SaaS Demo)";
+            msgModal.classList.remove('hidden');
+            msgModal.classList.add('flex');
+        }
+
+        function closeModal() {
+            msgModal.classList.remove('flex');
+            msgModal.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+
+```
